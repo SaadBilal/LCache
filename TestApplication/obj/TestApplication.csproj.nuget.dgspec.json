@@ -1,0 +1,86 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\TestApplication\\TestApplication.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\ClassLibrary1\\CacheClientLib.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\ClassLibrary1\\CacheClientLib.csproj",
+        "projectName": "CacheClientLib",
+        "projectPath": "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\ClassLibrary1\\CacheClientLib.csproj"
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
+    "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\TestApplication\\TestApplication.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\TestApplication\\TestApplication.csproj",
+        "projectName": "TestApplication",
+        "projectPath": "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\TestApplication\\TestApplication.csproj",
+        "packagesPath": "C:\\Users\\Saad_Bilal\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\TestApplication\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Saad_Bilal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\ClassLibrary1\\CacheClientLib.csproj": {
+                "projectPath": "C:\\Users\\Saad_Bilal\\source\\repos\\ClassLibrary1\\ClassLibrary1\\CacheClientLib.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.202\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

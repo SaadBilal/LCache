@@ -1,0 +1,16 @@
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\ClassLibrary1.dll
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\ClassLibrary1.pdb
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.csproj.CoreCompileInputs.cache
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.dll
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.pdb
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\ClassLibrary1.dll.config
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Configuration.ConfigurationManager.dll
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Security.AccessControl.dll
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Security.Permissions.dll
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Security.Principal.Windows.dll
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Configuration.ConfigurationManager.xml
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Security.AccessControl.xml
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Security.Permissions.xml
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.csproj.CopyComplete
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.csprojAssemblyReference.cache

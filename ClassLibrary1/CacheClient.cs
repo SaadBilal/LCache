@@ -1,0 +1,295 @@
+﻿using ClassLibrary1;
+using Newtonsoft.Json;
+using System;
+using System.Configuration;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Reflection;
+using System.Text;
+
+/// <summary>
+/// Cache client lib class to handle client cache  operations
+/// </summary>
+public class CacheClient : ICache, ICacheEvents
+{
+    public event EventHandler<CacheEvent> CacheUpdated;
+    NetworkStream stream = null;
+    TcpClient tcpClient = null;
+    private static int port;
+
+    /// <summary>
+    /// Cache operations enumerations
+    /// </summary>
+    public enum CacheOperations
+    {
+        Init,
+        Add,
+        Update,
+        Remove,
+        Get,
+        Clear,
+        Dispose,
+        Sub,
+        UnSub
+    }
+
+    /// <summary>
+    /// Cache client constructor
+    /// </summary>
+    public CacheClient()
+    {
+        ReadConfigInClass();
+    }
+
+    /// <summary>
+    /// To read port from code
+    /// </summary>
+    private static void ReadConfigInClass()
+    {
+        port = 8081;
+    }
+
+    /// <summary>
+    /// To handle client add opertaion
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="expirationSeconds"></param>
+    public void Add(string key, object value, int? expirationSeconds)
+    {
+        object res = streamReadWrite(CacheOperations.Add.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        OnItemAdded(key);
+    }
+
+    /// <summary>
+    /// To handle client cache remove operation
+    /// </summary>
+    /// <param name="key"></param>
+    public void Remove(string key)
+    {
+        object res = streamReadWrite(CacheOperations.Remove.ToString() + "|" + key);
+        OnItemRemoved(key);
+    }
+
+    /// <summary>
+    /// To get cache against key
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public object Get(string key)
+    {
+        return streamReadWrite(CacheOperations.Get.ToString() + "|" + key);
+    }
+
+    /// <summary>
+    /// To clear the cache
+    /// </summary>
+    public void Clear()
+    {
+        streamReadWrite(CacheOperations.Clear.ToString() + "|");
+    }
+
+    /// <summary>
+    /// To Dispose cache
+    /// </summary>
+    public void Dispose()
+    {
+        streamReadWrite(CacheOperations.Dispose.ToString() + "|");
+    }
+
+    /// <summary>
+    /// To Initialize cache instance
+    /// </summary>
+    void ICache.Initialize()
+    {
+        streamReadWrite(CacheOperations.Init.ToString() + "|");
+    }
+
+    /// <summary>
+    /// To Update cache against key
+    /// </summary>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <param name="expirationSeconds"></param>
+    void ICache.Update(string key, object value, int? expirationSeconds)
+    {
+        object res = streamReadWrite(CacheOperations.Update.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        OnItemUpdated(key);
+    }
+
+    /// <summary>
+    /// Handler method to handle cache events
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnCacheUpdated(object sender, CacheEvent e)
+    {
+        Console.WriteLine("NotifyCacheUpdated :: eventType: " + e.EventType + " | " + "Key: " + e.Key);
+    }
+
+    /// <summary>
+    /// To subscribe for cache events
+    /// </summary>
+    /// <param name="cacheEvents"></param>
+    void ICache.SubscribeToCacheUpdates(ICacheEvents cacheEvents)
+    {
+        streamReadWrite(CacheOperations.Sub.ToString() + "|");
+        CacheUpdated += OnCacheUpdated;
+    }
+
+    /// <summary>
+    /// to unsubscribe from cache events
+    /// </summary>
+    /// <param name="cacheEvents"></param>
+    void ICache.UnsubscribeFromCacheUpdates(ICacheEvents cacheEvents)
+    {
+        streamReadWrite(CacheOperations.UnSub.ToString() + "|");
+        CacheUpdated -= OnCacheUpdated;
+    }
+
+    /// <summary>
+    /// To read and write from stream
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public object streamReadWrite(string request)
+    {
+        try
+        {
+            ensureTcpConnection();
+            stream = tcpClient.GetStream();
+
+            byte[] requestBytes = Encoding.ASCII.GetBytes(request);
+            stream.Write(requestBytes, 0, requestBytes.Length);
+            string response = "";
+            byte[] responseBytes = new byte[1024];
+            int bytesRead = stream.Read(responseBytes, 0, responseBytes.Length);
+            response = Encoding.ASCII.GetString(responseBytes, 0, bytesRead);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(response);
+            stream.Close();
+            return response;
+
+
+
+        }
+        catch (ArgumentNullException e)
+        {
+            Console.WriteLine("ArgumentNullException: {0}", e);
+            return e.Message;
+        }
+        catch (SocketException e)
+        {
+            Console.WriteLine("SocketException: {0}", e);
+            return e.Message;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Client Exception: {0}", (object)ex.Message);
+            return ex.Message;
+        }
+
+    }
+
+    /// <summary>
+    /// To read stream from tcp client
+    /// </summary>
+    public void streamRead()
+    {
+        try
+        {
+            ensureTcpConnection();
+            stream = tcpClient.GetStream();
+            byte[] responseBytes = new byte[1024];
+
+            int bytesRead = stream.Read(responseBytes, 0, responseBytes.Length);
+            string response = Encoding.ASCII.GetString(responseBytes, 0, bytesRead);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(response);
+        }
+        catch (ArgumentNullException e)
+        {
+            Console.WriteLine("ArgumentNullException: {0}", e);
+        }
+        catch (SocketException e)
+        {
+            Console.WriteLine("SocketException: {0}", e);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception: {0}", (object)ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// To get tcp client an connect to respective IP and port
+    /// </summary>
+    private void ensureTcpConnection()
+    {
+        try
+        {
+            if (tcpClient == null || !tcpClient.Connected)
+            {
+                tcpClient = new TcpClient();
+                tcpClient.Connect("localhost", port);
+                tcpClient.NoDelay = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Write("Exception: {0}", ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// to read port from config 
+    /// </summary>
+    private static void ReadConfig()
+    {
+        try
+        {
+            var clientPort = (ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location)).AppSettings.Settings["port"].Value;
+            if (!string.IsNullOrEmpty(clientPort))
+            {
+                port = int.Parse(clientPort);
+            }
+            else
+            {
+                Console.WriteLine("ClientPort not found in app.config. Using default port.");
+            }
+        }
+        catch (ConfigurationErrorsException)
+        {
+            Console.WriteLine("Error reading app.config. Using default port.");
+        }
+    }
+
+    /// <summary>
+    /// ICacheEvents function defination for cache Add event handling
+    /// </summary>
+    /// <param name="key"></param>
+    public void OnItemAdded(string key)
+    {
+        CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Add, key));
+    }
+
+    /// <summary>
+    /// ICacheEvents functiona defination for cache Update  event handling
+    /// </summary>
+    /// <param name="key"></param>
+    public void OnItemUpdated(string key)
+    {
+        CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Update, key));
+    }
+
+    /// <summary>
+    /// ICacheEvents functiona defination for cache remove event handling
+    /// </summary>
+    /// <param name="key"></param>
+    public void OnItemRemoved(string key)
+    {
+        CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Remove, key, ""));
+    }
+}
