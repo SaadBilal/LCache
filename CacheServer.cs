@@ -452,6 +452,10 @@ class CacheServer : ICache
         }
     }
 
+    /// <summary>
+    /// To get server cache logger instance[log4net]
+    /// </summary>
+    /// <returns></returns>
     public static Logger GetCacherLogger()
     {
         try
