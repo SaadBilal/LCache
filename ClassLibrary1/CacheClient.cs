@@ -18,10 +18,10 @@ using System.Text;
 public class CacheClient : ICache, ICacheEvents
 {
     public event EventHandler<CacheEvent> CacheUpdated;
+    public static ClientLogger clientCacheLogger;
     NetworkStream stream = null;
     TcpClient tcpClient = null;
     private static int port;
-    public static ClientLogger clientCacheLogger;
 
     /// <summary>
     /// Cache operations enumerations

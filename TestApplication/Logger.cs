@@ -3,12 +3,19 @@ using System;
 using System.Reflection;
 namespace Log4NetSample.LogUtility
 {
+    /// <summary>
+    /// Logger Interface
+    /// </summary>
     public interface ILogger
     {
         void Debug(string message);
         void Info(string message);
         void Error(string message, Exception ex);
     }
+
+    /// <summary>
+    /// Logger class
+    /// </summary>
     public class Logger : ILogger
     {
         private readonly ILog _logger;
