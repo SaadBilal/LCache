@@ -1,0 +1,91 @@
+2023-11-15 12:41:11,499 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 12:41:11,584 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 12:41:11,594 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 12:41:11,594 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 12:41:46,397 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 12:41:46,434 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 12:41:46,441 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 12:41:46,446 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 12:41:49,114 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-15 12:47:06,216 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 12:47:06,265 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 12:47:06,273 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 12:47:06,273 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 12:49:56,411 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 12:49:56,457 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 12:49:56,465 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 12:49:56,466 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 12:49:59,229 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-15 14:20:08,600 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 14:20:08,687 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 14:20:08,709 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 14:20:08,710 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 14:20:10,070 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-15 14:20:10,079 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache Server started on port 8081
+2023-11-15 14:20:30,101 [11] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:20:35,768 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:20:35,786 [13] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Init | key:  | value:  | ExMessage: 
+2023-11-15 14:20:50,900 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:20:50,912 [15] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: saad | value: bilal | ExMessage: 
+2023-11-15 14:20:55,806 [18] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:21:10,945 [18] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:37:20,386 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 14:37:20,463 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 14:37:20,478 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 14:37:20,481 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 14:37:24,597 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-15 14:37:24,606 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache Server started on port 8081
+2023-11-15 14:37:36,727 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:37:36,752 [6] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Init | key:  | value:  | ExMessage: 
+2023-11-15 14:37:44,642 [13] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:37:47,892 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:37:47,913 [15] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: saad | value: saad | ExMessage: 
+2023-11-15 14:37:56,751 [14] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:38:07,918 [14] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:38:11,376 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:38:11,390 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Remove | key: saad | value:  | ExMessage: 
+2023-11-15 14:38:31,401 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:40:38,093 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:40:44,736 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:40:44,744 [23] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: saad | value: bilal | ExMessage: 
+2023-11-15 14:40:58,119 [25] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:41:04,753 [26] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:53:41,566 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 14:53:41,624 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 14:53:41,633 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 14:53:41,633 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 14:53:42,472 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-15 14:53:42,488 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache Server started on port 8081
+2023-11-15 14:53:49,959 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 14:53:49,972 [12] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Init | key:  | value:  | ExMessage: 
+2023-11-15 14:54:02,527 [7] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 14:54:09,976 [7] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 15:07:07,858 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 15:07:07,899 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 15:07:07,907 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 15:07:07,907 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 15:07:10,658 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-15 15:07:10,670 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache Server started on port 8081
+2023-11-15 15:07:30,698 [7] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 17:39:15,813 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-15 17:39:15,850 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-15 17:39:15,857 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-15 17:39:15,857 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-15 17:39:20,220 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-15 17:39:20,229 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache Server started on port 8081
+2023-11-15 17:39:40,262 [7] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 17:49:40,473 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 17:49:40,490 [13] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Init | key:  | value:  | ExMessage: 
+2023-11-15 17:49:54,190 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 17:49:54,228 [15] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: saad | value: bilal | ExMessage: 
+2023-11-15 17:50:00,512 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 17:50:03,543 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 17:50:03,549 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Remove | key: sa | value:  | ExMessage: 
+2023-11-15 17:50:13,492 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 17:50:13,501 [21] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Remove | key: 5 | value:  | ExMessage: 
+2023-11-15 17:50:14,236 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 17:50:22,362 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-15 17:50:22,395 [23] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Remove | key: saad | value:  | ExMessage: 
+2023-11-15 17:50:23,562 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 17:50:33,530 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-15 17:50:42,405 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:

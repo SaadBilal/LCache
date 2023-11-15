@@ -1,8 +1,11 @@
 ﻿using CacheServerConcole;
 using log4net;
+using log4net.Config;
+using Log4NetSample.LogUtility;
 using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 
 /// <summary>
@@ -18,13 +21,14 @@ class CacheServer : ICache
     private static string[] requestParts = default;
     private static Cache<string, string> myCache;
     private static int mNumberOfClients = 0;
+    private static Logger serverCacheLogger;
     private static string operation = "";
     private static string response = "";
     private static string key = "";
     private static int cacheSize;
     private static ICache icache;
     private static int port;
-    private static ILog log;   
+    private static ILog log;
     /// <summary>
     /// Cache operations enumerations
     /// </summary>
@@ -46,10 +50,25 @@ class CacheServer : ICache
     /// <param name="args"></param>
     public static void Main(string[] args)
     {
-        log = LogManager.GetLogger("CacheLogs");
+        serverCacheLogger = GetCacherLogger();
+        serverCacheLogger.Info("Starting the console application");
+        try
+        {
+            serverCacheLogger.Debug("Starting {MethodBase.GetCurrentMethod()?.DeclaringType}");
+            throw new Exception("Sample Error inside the try catch block code");
+        }
+        catch (Exception ex)
+        {
+            serverCacheLogger.Error(ex.Message, ex.InnerException);
+        }
+        serverCacheLogger.Debug("Waiting for user input");
+        Console.ReadLine();
+        serverCacheLogger.Info("Ending application");
+
         icache = new CacheServer();
         ReadConfig();
         StartServer();
+
         /*HostFactory.Run(x => x.Service<Service1>());
         Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
         ConfigureService.Configure();*/
@@ -61,13 +80,13 @@ class CacheServer : ICache
     {
         TcpListener listener = new TcpListener(IPAddress.Any, port);
         listener.Start();
-        Console.WriteLine("Cache Server started on port " + port);
+        serverCacheLogger.Info("Cache Server started on port " + port);
 
         while (true)
         {
             GetBackgroundthread();
             TcpClient client = listener.AcceptTcpClient();
-            Console.WriteLine("Connected " + ((IPEndPoint)client.Client.RemoteEndPoint).Address);
+            serverCacheLogger.Info("Connected " + ((IPEndPoint)client.Client.RemoteEndPoint).Address);
             Thread clientThread = new Thread(HandleClient);
             clientThread.Start(client);
         }
@@ -159,7 +178,7 @@ class CacheServer : ICache
                 {
                     clients.Add("user" + mNumberOfClients, client);
                 }
-                Console.WriteLine(clients.Count + "---> " + "user" + mNumberOfClients);
+                serverCacheLogger.Info(clients.Count + "---> " + "user" + mNumberOfClients);
                 icache.SubscribeToCacheUpdates();
             }
             else if (operation == CacheOperations.UnSub.ToString())
@@ -169,7 +188,7 @@ class CacheServer : ICache
                 {
                     clients.Remove("user" + mNumberOfClients);
                 }
-                Console.WriteLine(clients.Count + "---> " + "user" + mNumberOfClients);
+                serverCacheLogger.Info(clients.Count + "---> " + "user" + mNumberOfClients);
                 icache.UnsubscribeFromCacheUpdates();
             }
 
@@ -178,7 +197,7 @@ class CacheServer : ICache
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Server Exception: {0}", (string)ex.Message);
+            serverCacheLogger.Error("Server Exception: {0}", ex.InnerException);
             response = ex.Message;
         }
     }
@@ -189,7 +208,7 @@ class CacheServer : ICache
     {
         if (myCache == null)
         {
-            myCache = new Cache<string, string>(getCacheSize());
+            myCache = new Cache<string, string>(getCacheSize(), serverCacheLogger);
             response = myCache.InitializeCache();
             NotifyCacheUpdated(CacheEventType.Init, key);
         }
@@ -322,7 +341,7 @@ class CacheServer : ICache
     public static void NotifyCacheUpdated(CacheEventType eventType, string? key = null, object? value = null, string? exMsg = null)
     {
         CacheUpdated?.Invoke(null, new CacheEvent(eventType, key, value));
-        Console.WriteLine("NotifyCacheUpdated :: eventType: " + eventType + " | " + "key: " + key + " | " + "value: " + value + " | " + "ExMessage: " + exMsg);
+        serverCacheLogger.Info("NotifyCacheUpdated :: eventType: " + eventType + " | " + "key: " + key + " | " + "value: " + value + " | " + "ExMessage: " + exMsg);
     }
     /// <summary>
     /// To get cache size from config
@@ -339,13 +358,13 @@ class CacheServer : ICache
             }
             else
             {
-                Console.WriteLine("cacheSize not found in app.config. Using default size.");
+                serverCacheLogger.Info("cacheSize not found in app.config. Using default size.");
                 return DEFAULT_CACHE_SIZE;
             }
         }
-        catch (ConfigurationErrorsException)
+        catch (ConfigurationErrorsException e)
         {
-            Console.WriteLine("Error reading app.config. Using default size.");
+            serverCacheLogger.Error("Error reading app.config. Using default size.",e.InnerException);
             return DEFAULT_CACHE_SIZE;
         }
     }
@@ -363,12 +382,12 @@ class CacheServer : ICache
             }
             else
             {
-                Console.WriteLine("ServerPort not found in app.config. Using default port.");
+                serverCacheLogger.Info("ServerPort not found in app.config. Using default port.");
             }
         }
-        catch (ConfigurationErrorsException)
+        catch (ConfigurationErrorsException e)
         {
-            Console.WriteLine("Error reading app.config. Using default port.");
+            serverCacheLogger.Error("Error reading app.config. Using default port.",e.InnerException);
         }
     }
 
@@ -377,8 +396,24 @@ class CacheServer : ICache
     /// </summary>
     public static void GetBackgroundthread()
     {
-        Thread backgroundThread = new Thread(EvictionPolicyTimer);
-        backgroundThread.Start();
+        try
+        {
+            Thread backgroundThread = new Thread(EvictionPolicyTimer);
+            backgroundThread.IsBackground = true;
+            backgroundThread.Start();
+        }
+        catch (ArgumentNullException e)
+        {
+            serverCacheLogger.Error("Background thread exception: {0}", e.InnerException);
+        }
+        catch (ThreadStateException e)
+        {
+            serverCacheLogger.Error("Background thread exception: {0}", e.InnerException);
+        }
+        catch (Exception e)
+        {
+            serverCacheLogger.Error("Background thread exception: {0}", e.InnerException);
+        }
     }
 
     /// <summary>
@@ -386,7 +421,22 @@ class CacheServer : ICache
     /// </summary>
     public static void EvictionPolicyTimer()
     {
-        Timer timer = new Timer(new TimerCallback(ApplyEvictionPolicy), null, 20000, System.Threading.Timeout.Infinite);
+        try
+        {
+            Timer timer = new Timer(new TimerCallback(ApplyEvictionPolicy), null, 20000, System.Threading.Timeout.Infinite);
+        }
+        catch (ArgumentNullException e)
+        {
+            serverCacheLogger.Error("Timer exception: {0}", e.InnerException);
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            serverCacheLogger.Error("Timer exception: {0}", e.InnerException);
+        }
+        catch (Exception e)
+        {
+            serverCacheLogger.Error("Timer exception: {0}", e.InnerException);
+        }
     }
 
     /// <summary>
@@ -395,10 +445,25 @@ class CacheServer : ICache
     /// <param name="obj"></param>
     private static void ApplyEvictionPolicy(object? obj)
     {
-        Console.WriteLine("evictionPolicy: Called:");
+        serverCacheLogger.Info("evictionPolicy: Called:");
         if (myCache != null) 
         {
             myCache.ExecuteEvictionPolicy();
+        }
+    }
+
+    public static Logger GetCacherLogger()
+    {
+        try
+        {
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4netconfig.config"));
+            return new Logger();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Logger Exception: {0}", e.InnerException);
+            return default;
         }
     }
 }

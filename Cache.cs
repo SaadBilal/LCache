@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Log4NetSample.LogUtility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,13 +18,15 @@ namespace CacheServerConcole
         private Dictionary<TKey, CacheItem<TValue>> _cache = null;
         private static readonly object _cacheLock = new object();
         private int Capacity { get; }
+        private Logger Logger { get; }
         /// <summary>
         /// Get the Initial capacity of the Cache (Dictionary)
         /// </summary>
         /// <param name="capacity"></param>
-        public Cache(int capacity)
+        public Cache(int capacity, Logger logger)
         {
             Capacity = capacity;
+            Logger = logger;
         }
         /// <summary>
         /// To Add key value pair to Dictioanry
@@ -212,7 +215,7 @@ namespace CacheServerConcole
                 TKey lfuKey = findLFU();
                 if (lfuKey != null)
                 {
-                    Console.WriteLine("Cache size llimit reached: Removing Key--> " + lfuKey + " using LFU.");
+                    Logger.Info("Cache size llimit reached: Removing Key--> " + lfuKey + " using LFU.");
                     lock (_cacheLock)
                     {
                         _cache.Remove(lfuKey);
