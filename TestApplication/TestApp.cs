@@ -1,6 +1,11 @@
 ﻿using ClassLibrary1;
+using log4net;
+using log4net.Config;
+using Log4NetSample.LogUtility;
 using Newtonsoft.Json;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace TestApplication
 {
@@ -12,13 +17,15 @@ namespace TestApplication
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            Logger clientCacheLogger = GetCacherLogger();
             ICache cache = new CacheClient();
-            ICacheEvents cacheEvents = (ICacheEvents)cache;
+            ICacheEvents cacheEvents = (ClassLibrary1.ICacheEvents)cache;
+            
 
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Cache operations...");
+                clientCacheLogger.Info("Cache operations...");
                 Console.WriteLine("1. Init");
                 Console.WriteLine("2. Get");
                 Console.WriteLine("3. Add");
@@ -69,16 +76,16 @@ namespace TestApplication
                         cache.Dispose();
                         break;
                     case 8:
-                        Console.Write("Product Serialized Object inserting...");
+                        clientCacheLogger.Info("Product Serialized Object inserting...");
                         cache.Add("product", JsonConvert.SerializeObject(CreateProduct()), 1000);
                         break;
                     case 9:
-                        Console.Write("Get Product Object with key");
+                        clientCacheLogger.Info("Get Product Object with key");
                         Console.Write("Enter key: ");
                         key = Console.ReadLine();
                         string myprod = (string)cache.Get(key);
                         Product myprodObj = JsonConvert.DeserializeObject<Product>(myprod);
-                        Console.WriteLine(myprodObj.ToString());
+                        clientCacheLogger.Info(myprodObj.ToString());
                         break;
                     case 10:
                         cache.SubscribeToCacheUpdates(cacheEvents);
@@ -102,6 +109,21 @@ namespace TestApplication
                 UnitPrice = 50,
                 Category= "GARMENTS",
             };
+        }
+
+        public static Logger GetCacherLogger()
+        {
+            try
+            {
+                var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+                XmlConfigurator.Configure(logRepository, new FileInfo("log4netconfig.config"));
+                return new Logger();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Logger Exception: {0}", e.InnerException);
+                return default;
+            }
         }
 
     }

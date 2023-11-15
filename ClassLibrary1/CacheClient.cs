@@ -1,4 +1,7 @@
 ﻿using ClassLibrary1;
+using log4net;
+using log4net.Config;
+using Log4NetSample.LogUtility;
 using Newtonsoft.Json;
 using System;
 using System.Configuration;
@@ -7,6 +10,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+
 
 /// <summary>
 /// Cache client lib class to handle client cache  operations
@@ -17,6 +21,7 @@ public class CacheClient : ICache, ICacheEvents
     NetworkStream stream = null;
     TcpClient tcpClient = null;
     private static int port;
+    public static ClientLogger clientCacheLogger;
 
     /// <summary>
     /// Cache operations enumerations
@@ -39,6 +44,13 @@ public class CacheClient : ICache, ICacheEvents
     /// </summary>
     public CacheClient()
     {
+        //logger = GetCacherLogger();
+        clientCacheLogger = GetCacherLogger();
+        clientCacheLogger.Info("Starting the console application");
+   
+        clientCacheLogger.Debug("Waiting for user input");
+       
+        clientCacheLogger.Info("Ending application");
         ReadConfigInClass();
     }
 
@@ -125,7 +137,7 @@ public class CacheClient : ICache, ICacheEvents
     /// <param name="e"></param>
     private void OnCacheUpdated(object sender, CacheEvent e)
     {
-        Console.WriteLine("NotifyCacheUpdated :: eventType: " + e.EventType + " | " + "Key: " + e.Key);
+        clientCacheLogger.Info("NotifyCacheUpdated :: eventType: " + e.EventType + " | " + "Key: " + e.Key);
     }
 
     /// <summary>
@@ -167,8 +179,7 @@ public class CacheClient : ICache, ICacheEvents
             int bytesRead = stream.Read(responseBytes, 0, responseBytes.Length);
             response = Encoding.ASCII.GetString(responseBytes, 0, bytesRead);
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(response);
+            clientCacheLogger.Info(response);
             stream.Close();
             return response;
 
@@ -177,17 +188,17 @@ public class CacheClient : ICache, ICacheEvents
         }
         catch (ArgumentNullException e)
         {
-            Console.WriteLine("ArgumentNullException: {0}", e);
+            clientCacheLogger.Error("ArgumentNullException: {0}", e);
             return e.Message;
         }
         catch (SocketException e)
         {
-            Console.WriteLine("SocketException: {0}", e);
+            clientCacheLogger.Error("SocketException: {0}", e);
             return e.Message;
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Client Exception: {0}", (object)ex.Message);
+            clientCacheLogger.Error("Client Exception: {0}", ex);
             return ex.Message;
         }
 
@@ -206,20 +217,19 @@ public class CacheClient : ICache, ICacheEvents
 
             int bytesRead = stream.Read(responseBytes, 0, responseBytes.Length);
             string response = Encoding.ASCII.GetString(responseBytes, 0, bytesRead);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(response);
+            clientCacheLogger.Info(response);
         }
         catch (ArgumentNullException e)
         {
-            Console.WriteLine("ArgumentNullException: {0}", e);
+            clientCacheLogger.Error("ArgumentNullException: {0}", e);
         }
         catch (SocketException e)
         {
-            Console.WriteLine("SocketException: {0}", e);
+            clientCacheLogger.Error("SocketException: {0}", e);
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Exception: {0}", (object)ex.Message);
+            clientCacheLogger.Error("Exception: {0}", ex);
         }
     }
 
@@ -239,7 +249,7 @@ public class CacheClient : ICache, ICacheEvents
         }
         catch (Exception ex)
         {
-            Console.Write("Exception: {0}", ex.Message);
+            clientCacheLogger.Error("Exception: {0}", ex);
         }
     }
 
@@ -257,12 +267,12 @@ public class CacheClient : ICache, ICacheEvents
             }
             else
             {
-                Console.WriteLine("ClientPort not found in app.config. Using default port.");
+                clientCacheLogger.Info("ClientPort not found in app.config. Using default port.");
             }
         }
-        catch (ConfigurationErrorsException)
+        catch (ConfigurationErrorsException e)
         {
-            Console.WriteLine("Error reading app.config. Using default port.");
+            clientCacheLogger.Error("Error reading app.config. Using default port.", e.InnerException);
         }
     }
 
@@ -291,5 +301,20 @@ public class CacheClient : ICache, ICacheEvents
     public void OnItemRemoved(string key)
     {
         CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Remove, key, ""));
+    }
+
+    public static ClientLogger GetCacherLogger()
+    {
+        try
+        {
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(logRepository, new FileInfo("log4netconfig.config"));
+            return new ClientLogger(); 
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("Logger Exception: {0}", e.InnerException);
+            return default;
+        }
     }
 }
