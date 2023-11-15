@@ -44,13 +44,7 @@ public class CacheClient : ICache, ICacheEvents
     /// </summary>
     public CacheClient()
     {
-        //logger = GetCacherLogger();
         clientCacheLogger = GetCacherLogger();
-        clientCacheLogger.Info("Starting the console application");
-   
-        clientCacheLogger.Debug("Waiting for user input");
-       
-        clientCacheLogger.Info("Ending application");
         ReadConfigInClass();
     }
 
@@ -303,6 +297,10 @@ public class CacheClient : ICache, ICacheEvents
         CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Remove, key, ""));
     }
 
+    /// <summary>
+    /// To get server cache logger instance[log4net]
+    /// </summary>
+    /// <returns></returns>
     public static ClientLogger GetCacherLogger()
     {
         try
