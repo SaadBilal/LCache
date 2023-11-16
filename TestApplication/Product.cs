@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TestApplication
 {
+    /// <summary>
+    /// Product Class
+    /// </summary>
     [Serializable]
     public class Product
     {

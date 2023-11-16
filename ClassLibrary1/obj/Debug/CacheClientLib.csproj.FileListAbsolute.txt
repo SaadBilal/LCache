@@ -17,4 +17,3 @@ C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\CacheClie
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\CacheClientLib.csproj.CopyComplete
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.dll
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\ClassLibrary1.pdb
-C:\Users\Saad_Bilal\source\repos\ClassLibrary1\ClassLibrary1\obj\Debug\CacheClientLib.csprojAssemblyReference.cache

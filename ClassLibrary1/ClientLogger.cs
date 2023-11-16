@@ -34,7 +34,7 @@ namespace Log4NetSample.LogUtility
         }
         public void Error(string message, Exception ex)
         {
-            this._logger?.Error(message, (ex != null)?ex.InnerException:null);
+            this._logger?.Error(message, ex);
         }
     }
 }

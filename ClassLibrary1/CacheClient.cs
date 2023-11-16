@@ -22,7 +22,6 @@ public class CacheClient : ICache, ICacheEvents
     NetworkStream stream = null;
     TcpClient tcpClient = null;
     private static int port;
-
     /// <summary>
     /// Cache operations enumerations
     /// </summary>
@@ -38,7 +37,6 @@ public class CacheClient : ICache, ICacheEvents
         Sub,
         UnSub
     }
-
     /// <summary>
     /// Cache client constructor
     /// </summary>
@@ -47,7 +45,6 @@ public class CacheClient : ICache, ICacheEvents
         clientCacheLogger = GetCacherLogger();
         ReadConfigInClass();
     }
-
     /// <summary>
     /// To read port from code
     /// </summary>
@@ -55,7 +52,6 @@ public class CacheClient : ICache, ICacheEvents
     {
         port = 8081;
     }
-
     /// <summary>
     /// To handle client add opertaion
     /// </summary>
@@ -64,20 +60,18 @@ public class CacheClient : ICache, ICacheEvents
     /// <param name="expirationSeconds"></param>
     public void Add(string key, object value, int? expirationSeconds)
     {
-        object res = streamReadWrite(CacheOperations.Add.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        object res = StreamReadWrite(CacheOperations.Add.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
         OnItemAdded(key);
     }
-
     /// <summary>
     /// To handle client cache remove operation
     /// </summary>
     /// <param name="key"></param>
     public void Remove(string key)
     {
-        object res = streamReadWrite(CacheOperations.Remove.ToString() + "|" + key);
+        object res = StreamReadWrite(CacheOperations.Remove.ToString() + "|" + key);
         OnItemRemoved(key);
     }
-
     /// <summary>
     /// To get cache against key
     /// </summary>
@@ -85,33 +79,29 @@ public class CacheClient : ICache, ICacheEvents
     /// <returns></returns>
     public object Get(string key)
     {
-        return streamReadWrite(CacheOperations.Get.ToString() + "|" + key);
+        return StreamReadWrite(CacheOperations.Get.ToString() + "|" + key);
     }
-
     /// <summary>
     /// To clear the cache
     /// </summary>
     public void Clear()
     {
-        streamReadWrite(CacheOperations.Clear.ToString() + "|");
+        StreamReadWrite(CacheOperations.Clear.ToString() + "|");
     }
-
     /// <summary>
     /// To Dispose cache
     /// </summary>
     public void Dispose()
     {
-        streamReadWrite(CacheOperations.Dispose.ToString() + "|");
+        StreamReadWrite(CacheOperations.Dispose.ToString() + "|");
     }
-
     /// <summary>
     /// To Initialize cache instance
     /// </summary>
     void ICache.Initialize()
     {
-        streamReadWrite(CacheOperations.Init.ToString() + "|");
+        StreamReadWrite(CacheOperations.Init.ToString() + "|");
     }
-
     /// <summary>
     /// To Update cache against key
     /// </summary>
@@ -120,10 +110,9 @@ public class CacheClient : ICache, ICacheEvents
     /// <param name="expirationSeconds"></param>
     void ICache.Update(string key, object value, int? expirationSeconds)
     {
-        object res = streamReadWrite(CacheOperations.Update.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        object res = StreamReadWrite(CacheOperations.Update.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
         OnItemUpdated(key);
     }
-
     /// <summary>
     /// Handler method to handle cache events
     /// </summary>
@@ -133,37 +122,34 @@ public class CacheClient : ICache, ICacheEvents
     {
         clientCacheLogger.Info("NotifyCacheUpdated :: eventType: " + e.EventType + " | " + "Key: " + e.Key);
     }
-
     /// <summary>
     /// To subscribe for cache events
     /// </summary>
     /// <param name="cacheEvents"></param>
     void ICache.SubscribeToCacheUpdates(ICacheEvents cacheEvents)
     {
-        streamReadWrite(CacheOperations.Sub.ToString() + "|");
+        StreamReadWrite(CacheOperations.Sub.ToString() + "|");
         CacheUpdated += OnCacheUpdated;
     }
-
     /// <summary>
     /// to unsubscribe from cache events
     /// </summary>
     /// <param name="cacheEvents"></param>
     void ICache.UnsubscribeFromCacheUpdates(ICacheEvents cacheEvents)
     {
-        streamReadWrite(CacheOperations.UnSub.ToString() + "|");
+        StreamReadWrite(CacheOperations.UnSub.ToString() + "|");
         CacheUpdated -= OnCacheUpdated;
     }
-
     /// <summary>
     /// To read and write from stream
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    public object streamReadWrite(string request)
+    public object StreamReadWrite(string request)
     {
         try
         {
-            ensureTcpConnection();
+            EnsureTcpConnection();
             stream = tcpClient.GetStream();
 
             byte[] requestBytes = Encoding.ASCII.GetBytes(request);
@@ -192,20 +178,19 @@ public class CacheClient : ICache, ICacheEvents
         }
         catch (Exception ex)
         {
-            clientCacheLogger.Error("Client Exception: {0}", ex);
+            clientCacheLogger.Error("Client Exception: {0}", ex.InnerException);
             return ex.Message;
         }
 
     }
-
     /// <summary>
     /// To read stream from tcp client
     /// </summary>
-    public void streamRead()
+    public void StreamRead()
     {
         try
         {
-            ensureTcpConnection();
+            EnsureTcpConnection();
             stream = tcpClient.GetStream();
             byte[] responseBytes = new byte[1024];
 
@@ -226,11 +211,10 @@ public class CacheClient : ICache, ICacheEvents
             clientCacheLogger.Error("Exception: {0}", ex);
         }
     }
-
     /// <summary>
     /// To get tcp client an connect to respective IP and port
     /// </summary>
-    private void ensureTcpConnection()
+    private void EnsureTcpConnection()
     {
         try
         {
@@ -243,10 +227,9 @@ public class CacheClient : ICache, ICacheEvents
         }
         catch (Exception ex)
         {
-            clientCacheLogger.Error("Exception: {0}", ex);
+            clientCacheLogger.Error("TcpClient Exception: {0}", ex.InnerException);
         }
     }
-
     /// <summary>
     /// to read port from config 
     /// </summary>
@@ -269,7 +252,6 @@ public class CacheClient : ICache, ICacheEvents
             clientCacheLogger.Error("Error reading app.config. Using default port.", e.InnerException);
         }
     }
-
     /// <summary>
     /// ICacheEvents function defination for cache Add event handling
     /// </summary>
@@ -278,7 +260,6 @@ public class CacheClient : ICache, ICacheEvents
     {
         CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Add, key));
     }
-
     /// <summary>
     /// ICacheEvents functiona defination for cache Update  event handling
     /// </summary>
@@ -287,7 +268,6 @@ public class CacheClient : ICache, ICacheEvents
     {
         CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Update, key));
     }
-
     /// <summary>
     /// ICacheEvents functiona defination for cache remove event handling
     /// </summary>
@@ -296,7 +276,6 @@ public class CacheClient : ICache, ICacheEvents
     {
         CacheUpdated?.Invoke(this, new CacheEvent(CacheEventType.Remove, key, ""));
     }
-
     /// <summary>
     /// To get server cache logger instance[log4net]
     /// </summary>

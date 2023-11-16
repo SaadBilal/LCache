@@ -1,4 +1,5 @@
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\bin\Debug\net5.0\TestApplication.exe
+C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\bin\Debug\net5.0\log4netconfig.config
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\bin\Debug\net5.0\TestApplication.deps.json
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\bin\Debug\net5.0\TestApplication.runtimeconfig.json
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\bin\Debug\net5.0\TestApplication.runtimeconfig.dev.json
@@ -24,4 +25,3 @@ C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\obj\Debug\net5.0\
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\obj\Debug\net5.0\ref\TestApplication.dll
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\obj\Debug\net5.0\TestApplication.pdb
 C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\obj\Debug\net5.0\TestApplication.genruntimeconfig.cache
-C:\Users\Saad_Bilal\source\repos\ClassLibrary1\TestApplication\bin\Debug\net5.0\log4netconfig.config
