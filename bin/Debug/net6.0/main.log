@@ -89,3 +89,64 @@
 2023-11-15 17:50:23,562 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
 2023-11-15 17:50:33,530 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
 2023-11-15 17:50:42,405 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:13:12,246 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-16 11:13:12,314 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-16 11:13:12,330 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-16 11:13:12,332 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-16 11:13:13,986 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-16 11:13:13,996 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache Server started on port 8081
+2023-11-16 11:13:34,015 [7] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:13:34,082 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:13:34,093 [14] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Init | key:  | value:  | ExMessage: 
+2023-11-16 11:13:50,439 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:13:50,451 [16] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: s | value: d | ExMessage: 
+2023-11-16 11:13:54,111 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:14:10,465 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:14:22,629 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:14:22,635 [20] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: d | value: c | ExMessage: 
+2023-11-16 11:14:35,890 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:14:35,895 [22] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: f | value: c | ExMessage: 
+2023-11-16 11:14:42,651 [24] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:14:47,138 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:14:47,143 [26] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: g | value: h | ExMessage: 
+2023-11-16 11:14:55,938 [24] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:15:07,184 [24] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:15:08,024 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:15:08,039 [28] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Remove | key: t | value:  | ExMessage: 
+2023-11-16 11:15:28,058 [30] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:15:50,795 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:15:50,803 [32] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: n | value: m | ExMessage: 
+2023-11-16 11:16:02,801 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:16:02,811 [34] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: m | value: k | ExMessage: 
+2023-11-16 11:16:10,817 [36] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:16:10,825 [36] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache size llimit reached: Removing Key--> s using LFU.
+2023-11-16 11:16:22,835 [36] INFO Log4NetSample.LogUtility.Logger.Info[24] - evictionPolicy: Called:
+2023-11-16 11:31:49,936 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Starting the console application
+2023-11-16 11:31:50,023 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Starting {MethodBase.GetCurrentMethod()?.DeclaringType}
+2023-11-16 11:31:50,041 [1] ERROR Log4NetSample.LogUtility.Logger.Error[28] - Sample Error inside the try catch block code
+2023-11-16 11:31:50,043 [1] DEBUG Log4NetSample.LogUtility.Logger.Debug[20] - Waiting for user input
+2023-11-16 11:31:52,798 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Ending application
+2023-11-16 11:31:52,808 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache Server started on port 8081
+2023-11-16 11:32:12,401 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:32:12,423 [6] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Init | key:  | value:  | ExMessage: 
+2023-11-16 11:32:12,853 [13] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**
+2023-11-16 11:32:32,419 [13] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**
+2023-11-16 11:32:38,259 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:32:38,268 [15] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: s | value: d | ExMessage: 
+2023-11-16 11:32:51,811 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:32:51,817 [17] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: f | value: v | ExMessage: 
+2023-11-16 11:32:58,286 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**
+2023-11-16 11:33:02,736 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:33:02,738 [21] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: g | value: b | ExMessage: 
+2023-11-16 11:33:09,665 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:33:09,671 [23] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: h | value: n | ExMessage: 
+2023-11-16 11:33:11,822 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**
+2023-11-16 11:33:22,053 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:33:22,059 [25] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: l | value: o | ExMessage: 
+2023-11-16 11:33:22,783 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**
+2023-11-16 11:33:29,674 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**
+2023-11-16 11:33:34,091 [1] INFO Log4NetSample.LogUtility.Logger.Info[24] - Connected 127.0.0.1
+2023-11-16 11:33:34,098 [27] INFO Log4NetSample.LogUtility.Logger.Info[24] - NotifyCacheUpdated :: eventType: Add | key: u | value: i | ExMessage: 
+2023-11-16 11:33:42,100 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**
+2023-11-16 11:33:42,103 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - Cache is used upto 80%, Executing LFU evicting policy: Removing Key(s) --> s
+2023-11-16 11:33:54,145 [19] INFO Log4NetSample.LogUtility.Logger.Info[24] - EvictionPolicy **Called**

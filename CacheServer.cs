@@ -390,7 +390,6 @@ class CacheServer : ICache
             serverCacheLogger.Error("Error reading app.config. Using default port.",e.InnerException);
         }
     }
-
     /// <summary>
     /// Background thread to execute eviction policy
     /// </summary>
@@ -415,7 +414,6 @@ class CacheServer : ICache
             serverCacheLogger.Error("Background thread exception: {0}", e.InnerException);
         }
     }
-
     /// <summary>
     /// Eviction Timer
     /// </summary>
@@ -438,20 +436,18 @@ class CacheServer : ICache
             serverCacheLogger.Error("Timer exception: {0}", e.InnerException);
         }
     }
-
     /// <summary>
     /// Apply eviction policy to cache
     /// </summary>
     /// <param name="obj"></param>
     private static void ApplyEvictionPolicy(object? obj)
     {
-        serverCacheLogger.Info("evictionPolicy: Called:");
+        serverCacheLogger.Info("EvictionPolicy **Called**");
         if (myCache != null) 
         {
             myCache.ExecuteEvictionPolicy();
         }
     }
-
     /// <summary>
     /// To get server cache logger instance[log4net]
     /// </summary>

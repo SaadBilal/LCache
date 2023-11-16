@@ -16,6 +16,7 @@ namespace CacheServerConcole
     {
         private Dictionary<TKey, Frequency<TKey>> _keyCounter = null;
         private Dictionary<TKey, CacheItem<TValue>> _cache = null;
+        private List<TKey> cacheKeysToEvict = new List<TKey>();
         private static readonly object _cacheLock = new object();
         private int Capacity { get; }
         private Logger Logger { get; }
@@ -207,7 +208,10 @@ namespace CacheServerConcole
                 return (TValue)Convert.ChangeType(ex.Message, typeof(TValue));
             }
         }
-
+        /// <summary>
+        /// To evict cache items based on LFU eviction policy
+        /// </summary>
+        /// <returns></returns>
         public TValue ExecuteEvictionPolicy() 
         {
             if ((_cache.Count >= Capacity)) 
@@ -215,11 +219,14 @@ namespace CacheServerConcole
                 TKey lfuKey = findLFU();
                 if (lfuKey != null)
                 {
-                    Logger.Info("Cache size llimit reached: Removing Key--> " + lfuKey + " using LFU.");
+                    Logger.Info("Cache is used upto 80%, Executing LFU eviction policy: Removing Key(s) --> " + lfuKey);
                     lock (_cacheLock)
                     {
-                        _cache.Remove(lfuKey);
-                        _keyCounter.Remove(lfuKey);
+                        foreach(TKey key in cacheKeysToEvict) 
+                        {
+                            _cache.Remove(key);
+                            _keyCounter.Remove(key);
+                        }
                     }
                 }
                 return (TValue)Convert.ChangeType("Eviction policy executed!", typeof(TValue));
@@ -236,15 +243,31 @@ namespace CacheServerConcole
         {
             TKey lfuKey = default;
             int minFrequency = Int32.MaxValue;
-            foreach (KeyValuePair<TKey, Frequency<TKey>> entry in _keyCounter)
+            int usedCapacity = getUsedCachePercentage(_cache.Count, Capacity);
+            if(usedCapacity >= 80)
             {
-                if (entry.Value.frequency < minFrequency)
+                cacheKeysToEvict.Clear();
+                foreach (KeyValuePair<TKey, Frequency<TKey>> entry in _keyCounter)
                 {
-                    minFrequency = entry.Value.frequency;
-                    lfuKey = entry.Key;
+                    if (entry.Value.frequency < minFrequency)
+                    {
+                        minFrequency = entry.Value.frequency;
+                        lfuKey = entry.Key;
+                        cacheKeysToEvict.Add(entry.Key);
+                    }
                 }
             }
             return lfuKey;
+        }
+        /// <summary>
+        /// To calculate cache capacity used
+        /// </summary>
+        /// <param name="usedCapacity"></param>
+        /// <param name="capacity"></param>
+        /// <returns></returns>
+        public static int getUsedCachePercentage(int usedCapacity, int capacity)
+        {
+            return (int)Math.Round((double)(100 * usedCapacity) / capacity);
         }
         /// <summary>
         /// The incremental counter to update the frequencies.
