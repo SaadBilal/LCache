@@ -17,7 +17,7 @@ namespace CacheServerConcole
                     service.WhenStopped(s => s.Stop());
                 });
                 //Setup Account that window service use to run.  
-                configure.RunAsLocalSystem();
+                configure.RunAsLocalService();
                 configure.SetServiceName("CacheService");
                 configure.SetDisplayName("CacheService");
                 configure.SetDescription("CacheService: windows service with Topshelf");

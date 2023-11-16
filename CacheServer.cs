@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using Topshelf;
 
 /// <summary>
 /// Cache server class to manage all cache operations, network and communication with clients
@@ -51,27 +52,27 @@ class CacheServer : ICache
     public static void Main(string[] args)
     {
         serverCacheLogger = GetCacherLogger();
-        serverCacheLogger.Info("Starting the console application");
-        try
-        {
-            serverCacheLogger.Debug("Starting {MethodBase.GetCurrentMethod()?.DeclaringType}");
-            throw new Exception("Sample Error inside the try catch block code");
-        }
-        catch (Exception ex)
-        {
-            serverCacheLogger.Error(ex.Message, ex.InnerException);
-        }
-        serverCacheLogger.Debug("Waiting for user input");
-        Console.ReadLine();
-        serverCacheLogger.Info("Ending application");
+        /* serverCacheLogger.Info("Starting the console application");
+         try
+         {
+             serverCacheLogger.Debug("Starting {MethodBase.GetCurrentMethod()?.DeclaringType}");
+             throw new Exception("Sample Error inside the try catch block code");
+         }
+         catch (Exception ex)
+         {
+             serverCacheLogger.Error(ex.Message, ex.InnerException);
+         }
+         serverCacheLogger.Debug("Waiting for user input");
+         Console.ReadLine();
+         serverCacheLogger.Info("Ending application");
 
-        icache = new CacheServer();
-        ReadConfig();
-        StartServer();
+         icache = new CacheServer();
+         ReadConfig();
+         StartServer()*/
+        ;
 
-        /*HostFactory.Run(x => x.Service<Service1>());
         Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-        ConfigureService.Configure();*/
+        ConfigureService.Configure();
     }
     /// <summary>
     /// To start listnering for clients

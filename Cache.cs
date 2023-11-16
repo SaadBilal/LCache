@@ -1,6 +1,7 @@
 ﻿using Log4NetSample.LogUtility;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,9 @@ namespace CacheServerConcole
     {
         private Dictionary<TKey, Frequency<TKey>> _keyCounter = null;
         private Dictionary<TKey, CacheItem<TValue>> _cache = null;
-        private List<TKey> cacheKeysToEvict = new List<TKey>();
         private static readonly object _cacheLock = new object();
+        private List<TKey> cacheKeysToEvict = new List<TKey>();
+        private static readonly int DEFAULT_CACHE_CAPACITY = 80;
         private int Capacity { get; }
         private Logger Logger { get; }
         /// <summary>
@@ -89,7 +91,7 @@ namespace CacheServerConcole
                     lock (_cacheLock)
                     {
                         _cache[key] = new CacheItem<TValue>(value, expiresAfter);
-                        increment(key);
+                        Increment(key);
                     }
                     return (TValue)Convert.ChangeType("Value: " + value + " updated against key: " + key, typeof(TValue));
                 }
@@ -116,7 +118,7 @@ namespace CacheServerConcole
                 if (!_cache.ContainsKey(key)) return (TValue)Convert.ChangeType("No Value Found!", typeof(TValue));
 
                 var cached = _cache[key];
-                increment(key);
+                Increment(key);
                 if (DateTimeOffset.Now - cached.Created >= cached.ExpiresAfter)
                 {
                     _cache.Remove(key);
@@ -216,7 +218,7 @@ namespace CacheServerConcole
         {
             if ((_cache.Count >= Capacity)) 
             {
-                TKey lfuKey = findLFU();
+                TKey lfuKey = FindLFU();
                 if (lfuKey != null)
                 {
                     Logger.Info("Cache is used upto 80%, Executing LFU eviction policy: Removing Key(s) --> " + lfuKey);
@@ -239,12 +241,12 @@ namespace CacheServerConcole
         /// To find least frequently used key value form cache for data eviction based on LFU
         /// </summary>
         /// <returns></returns>
-        public TKey findLFU()
+        public TKey FindLFU()
         {
             TKey lfuKey = default;
             int minFrequency = Int32.MaxValue;
-            int usedCapacity = getUsedCachePercentage(_cache.Count, Capacity);
-            if(usedCapacity >= 80)
+            int usedCapacity = GetUsedCachePercentage(_cache.Count, Capacity);
+            if(usedCapacity >= GetCacheCapacityPercentage())
             {
                 cacheKeysToEvict.Clear();
                 foreach (KeyValuePair<TKey, Frequency<TKey>> entry in _keyCounter)
@@ -265,7 +267,7 @@ namespace CacheServerConcole
         /// <param name="usedCapacity"></param>
         /// <param name="capacity"></param>
         /// <returns></returns>
-        public static int getUsedCachePercentage(int usedCapacity, int capacity)
+        public static int GetUsedCachePercentage(int usedCapacity, int capacity)
         {
             return (int)Math.Round((double)(100 * usedCapacity) / capacity);
         }
@@ -273,13 +275,38 @@ namespace CacheServerConcole
         /// The incremental counter to update the frequencies.
         /// </summary>
         /// <param name="key"></param>
-        public void increment(TKey key)
+        public void Increment(TKey key)
         {
             if (!_keyCounter.ContainsKey(key))
             {
                 return;
             }
             _keyCounter[key].frequency += 1;
+        }
+        /// <summary>
+        /// To read cache capacity percentage from configurations
+        /// </summary>
+        /// <returns></returns>
+        private int GetCacheCapacityPercentage()
+        {
+            try
+            {
+                var capacityPercentage = ConfigurationManager.AppSettings["cacheCapacityPercentage"];
+                if (!string.IsNullOrEmpty(capacityPercentage))
+                {
+                    return int.Parse(capacityPercentage);
+                }
+                else
+                {
+                    Logger.Info("cache capacity percentage not found in app.config. Using default percentage.");
+                    return DEFAULT_CACHE_CAPACITY;
+                }
+            }
+            catch (ConfigurationErrorsException e)
+            {
+                Logger.Error("Error reading app.config. Using default percentage.", e.InnerException);
+                return DEFAULT_CACHE_CAPACITY;
+            }
         }
     }
 }
