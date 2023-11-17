@@ -37,6 +37,17 @@ public class CacheClient : ICache, ICacheEvents
         Sub,
         UnSub
     }
+
+    public enum CacheResponseOps
+    {
+        Success = 1,
+        Failure = 2,
+        CacheNotInitialized = 3,
+        CacheExpired = 4,
+        NoValueFound = 5,
+        NoCacheFound = 6,
+        DuplicateValue = 7
+    }
     /// <summary>
     /// Cache client constructor
     /// </summary>
@@ -60,7 +71,8 @@ public class CacheClient : ICache, ICacheEvents
     /// <param name="expirationSeconds"></param>
     public void Add(string key, object value, int? expirationSeconds)
     {
-        object res = StreamReadWrite(CacheOperations.Add.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        CacheResponseOps res = (CacheResponseOps)StreamReadWrite(CacheOperations.Add.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        ClientResponseHandler(res);
         OnItemAdded(key);
     }
     /// <summary>
@@ -293,5 +305,36 @@ public class CacheClient : ICache, ICacheEvents
             Console.WriteLine("Logger Exception: {0}", e.InnerException);
             return default;
         }
+    }
+
+    public static string ClientResponseHandler(CacheResponseOps response)
+    {
+        String resMsg = "";
+        switch (response) 
+        {
+            case CacheResponseOps.Success:
+                 resMsg = "Success";
+                break;
+            case CacheResponseOps.Failure:
+                resMsg = "Failure";
+                break;
+            case CacheResponseOps.CacheExpired:
+                resMsg = "CacheExpired";
+                break;
+            case CacheResponseOps.CacheNotInitialized:
+                resMsg = "CacheNotInitialized";
+                break;
+            case CacheResponseOps.DuplicateValue:
+                resMsg = "DuplicateValue";
+                break;
+            case CacheResponseOps.NoValueFound:
+                resMsg = "NoValueFound";
+                break;
+            case CacheResponseOps.NoCacheFound:
+                resMsg = "NoCacheFound";
+                break;
+
+        }
+        return resMsg;
     }
 }
