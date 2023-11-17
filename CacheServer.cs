@@ -79,7 +79,7 @@ class CacheServer : ICache
     /// </summary>
     private static void StartServer()
     {
-        TcpListener listener = new TcpListener(IPAddress.Any, port);
+       /* TcpListener listener = new TcpListener(IPAddress.Any, port);
         listener.Start();
         serverCacheLogger.Info("Cache Server started on port " + port);
 
@@ -90,7 +90,7 @@ class CacheServer : ICache
             serverCacheLogger.Info("Connected " + ((IPEndPoint)client.Client.RemoteEndPoint).Address);
             Thread clientThread = new Thread(HandleClient);
             clientThread.Start(client);
-        }
+        }*/
     }
     /// <summary>
     /// To handle client requests

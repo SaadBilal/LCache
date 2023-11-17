@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static CacheServerConcole.CacheService;
 
 namespace CacheServerConcole
 {
@@ -51,7 +52,8 @@ namespace CacheServerConcole
                             _cache[key] = new CacheItem<TValue>(value, expiresAfter);
                             _keyCounter.Add(key, new Frequency<TKey>(key, 1));
                         }
-                        return (TValue)Convert.ChangeType("Value: " + value + " added against key: " + key, typeof(TValue));
+                       // return (TValue)Convert.ChangeType("Value: " + value + " added against key: " + key, typeof(TValue));
+                        return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
                     //}
                     /*else
                     {

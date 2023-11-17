@@ -10,7 +10,7 @@ using System.Text;
 
 namespace CacheServerConcole
 {
-    public class CacheService
+    public class CacheService:ICache
     {
         private static Dictionary<string, TcpClient> clients = new Dictionary<string, TcpClient>();
         public static event EventHandler<CacheEvent> CacheUpdated;
@@ -46,6 +46,17 @@ namespace CacheServerConcole
             Sub,
             UnSub
         }
+
+        public enum CacheResponseOps
+        { 
+            Success = 1, 
+            Failure = 2,
+            CacheNotInitialized = 3,
+            CacheExpired = 4,
+            NoValueFound = 5,
+            NoCacheFound = 6,
+            DuplicateValue = 7
+        }
         /// <summary>
         /// To start a service
         /// </summary>
@@ -53,7 +64,7 @@ namespace CacheServerConcole
         {
             System.Diagnostics.Debugger.Launch();
             serverCacheLogger = GetCacherLogger();
-            icache = new CacheServer();
+            icache = new CacheService();
             ReadConfig();
             StartServer();
         }
@@ -69,17 +80,24 @@ namespace CacheServerConcole
         /// </summary>
         private static void StartServer()
         {
-            listener = new TcpListener(IPAddress.Any, port);
-            listener.Start();
-            serverCacheLogger.Info("Cache Server started on port " + port);
-
-            while (true)
+            try
             {
-                GetBackgroundthread();
-                client = listener.AcceptTcpClient();
-                serverCacheLogger.Info("Connected " + ((IPEndPoint)client.Client.RemoteEndPoint).Address);
-                clientThread = new Thread(HandleClient);
-                clientThread.Start(client);
+                listener = new TcpListener(IPAddress.Any, port);
+                listener.Start();
+                serverCacheLogger.Info("Cache Server started on port " + port);
+
+                while (true)
+                {
+                    StartBackgroundthread();
+                    client = listener.AcceptTcpClient();
+                   // serverCacheLogger.Info("Connected " + ((IPEndPoint)client.Client.RemoteEndPoint).Address);
+                    clientThread = new Thread(HandleClient);
+                    clientThread.Start(client);
+                }
+            } 
+            catch (Exception e)
+            {
+                serverCacheLogger.Error("Server Error {0}: ", e.InnerException);
             }
         }
         /// <summary>
@@ -233,6 +251,8 @@ namespace CacheServerConcole
                     expirationSeconds = Int32.MaxValue;
                 }
                 response = myCache.Add(key, (string)value, new TimeSpan(0, 0, seconds: (int)expirationSeconds));
+                //response = ResponseProtocol(myCache.Add(key, (string)value, new TimeSpan(0, 0, seconds: (int)expirationSeconds)), key, (string)value);
+                
                 NotifyCacheUpdated(CacheEventType.Add, key, value);
             }
             else
@@ -394,7 +414,7 @@ namespace CacheServerConcole
         /// <summary>
         /// Background thread to execute eviction policy
         /// </summary>
-        public static void GetBackgroundthread()
+        public static void StartBackgroundthread()
         {
             try
             {
@@ -466,6 +486,10 @@ namespace CacheServerConcole
                 Console.WriteLine("Logger Exception: {0}", e.InnerException);
                 return default;
             }
+        }
+        public static string ResponseProtocol(string response, string? key = null, string? value = null)
+        {
+            return response + "|" + key + "|" + value;
         }
     }
 }
