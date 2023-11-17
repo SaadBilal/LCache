@@ -55,7 +55,9 @@ namespace CacheServerConcole
             CacheExpired = 4,
             NoValueFound = 5,
             NoCacheFound = 6,
-            DuplicateValue = 7
+            DuplicateValue = 7,
+            NoKeyFound = 8,
+            CacheAlreadyInitialized = 9
         }
         /// <summary>
         /// To start a service

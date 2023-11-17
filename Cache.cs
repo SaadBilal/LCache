@@ -69,7 +69,7 @@ namespace CacheServerConcole
                 }
                 else
                 {
-                    return (TValue)Convert.ChangeType("Value already added against this key!", typeof(TValue));
+                    return (TValue)Convert.ChangeType(CacheResponseOps.DuplicateValue, typeof(TValue));
                 }
             }
             catch (Exception ex)
@@ -95,11 +95,11 @@ namespace CacheServerConcole
                         _cache[key] = new CacheItem<TValue>(value, expiresAfter);
                         Increment(key);
                     }
-                    return (TValue)Convert.ChangeType("Value: " + value + " updated against key: " + key, typeof(TValue));
+                    return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
                 }
                 else
                 {
-                    return (TValue)Convert.ChangeType("No key found!", typeof(TValue));
+                    return (TValue)Convert.ChangeType(CacheResponseOps.NoKeyFound, typeof(TValue));
                 }
             }
             catch (Exception ex)
@@ -116,8 +116,8 @@ namespace CacheServerConcole
         {
             try
             {
-                if (_cache == null) return (TValue)Convert.ChangeType("No Cache Found!", typeof(TValue));
-                if (!_cache.ContainsKey(key)) return (TValue)Convert.ChangeType("No Value Found!", typeof(TValue));
+                if (_cache == null) return (TValue)Convert.ChangeType(CacheResponseOps.NoCacheFound, typeof(TValue));
+                if (!_cache.ContainsKey(key)) return (TValue)Convert.ChangeType(CacheResponseOps.NoValueFound, typeof(TValue));
 
                 var cached = _cache[key];
                 Increment(key);
@@ -125,7 +125,7 @@ namespace CacheServerConcole
                 {
                     _cache.Remove(key);
                     _keyCounter.Remove(key);
-                    return (TValue)Convert.ChangeType("Cache Expired!", typeof(TValue));
+                    return (TValue)Convert.ChangeType(CacheResponseOps.CacheExpired, typeof(TValue));
                 }
                 return cached.Value;
             }
@@ -145,7 +145,7 @@ namespace CacheServerConcole
             {
                 _cache.Remove(key);
                 _keyCounter.Remove(key);
-                return (TValue)Convert.ChangeType("Cache removed against key: " + key, typeof(TValue));
+                return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
             }
             catch (Exception ex)
             {
@@ -162,7 +162,7 @@ namespace CacheServerConcole
             {
                 _cache.Clear();
                 _keyCounter.Clear();
-                return (TValue)Convert.ChangeType("Cache Cleared!", typeof(TValue));
+                return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
             }
             catch (Exception ex)
             {
@@ -181,7 +181,7 @@ namespace CacheServerConcole
                 _keyCounter.GetEnumerator().Dispose();
                 _cache = null;
                 _keyCounter = null;
-                return (TValue)Convert.ChangeType("Cache Disposed!", typeof(TValue));
+                return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
             }
             catch (Exception ex)
             {
@@ -200,11 +200,11 @@ namespace CacheServerConcole
                 {
                     _cache = new Dictionary<TKey, CacheItem<TValue>>(Capacity);
                     _keyCounter = new Dictionary<TKey, Frequency<TKey>>();
-                    return (TValue)Convert.ChangeType("Cache Initialized!", typeof(TValue));
+                    return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
                 }
                 else
                 {
-                    return (TValue)Convert.ChangeType("Cache already Initialized!", typeof(TValue));
+                    return (TValue)Convert.ChangeType(CacheResponseOps.CacheAlreadyInitialized, typeof(TValue));
                 }
             }
             catch (Exception ex)

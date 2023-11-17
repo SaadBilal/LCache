@@ -27,3 +27,10 @@ C:\Users\Saad_Bilal\Desktop\console_project\obj\Debug\net6.0\CacheServerConcole.
 C:\Users\Saad_Bilal\Desktop\console_project\obj\Debug\net6.0\CacheServerConcole.dll
 C:\Users\Saad_Bilal\Desktop\console_project\obj\Debug\net6.0\refint\CacheServerConcole.dll
 C:\Users\Saad_Bilal\Desktop\console_project\obj\Debug\net6.0\CacheServerConcole.pdb
+C:\Users\Saad_Bilal\Desktop\console_project\bin\Debug\net6.0\log4netconfig.config
+C:\Users\Saad_Bilal\Desktop\console_project\bin\Debug\net6.0\CacheServerConcole.dll.config
+C:\Users\Saad_Bilal\Desktop\console_project\bin\Debug\net6.0\CacheServerConcole.deps.json
+C:\Users\Saad_Bilal\Desktop\console_project\bin\Debug\net6.0\CacheServerConcole.runtimeconfig.json
+C:\Users\Saad_Bilal\Desktop\console_project\bin\Debug\net6.0\CacheServerConcole.pdb
+C:\Users\Saad_Bilal\Desktop\console_project\obj\Debug\net6.0\CacheServerConcole.genruntimeconfig.cache
+C:\Users\Saad_Bilal\Desktop\console_project\obj\Debug\net6.0\ref\CacheServerConcole.dll
