@@ -40,13 +40,13 @@ public class CacheClient : ICache, ICacheEvents
 
     public enum CacheResponseOps
     {
-        Success = 1,
-        Failure = 2,
-        CacheNotInitialized = 3,
-        CacheExpired = 4,
-        NoValueFound = 5,
-        NoCacheFound = 6,
-        DuplicateValue = 7
+        Success,
+        Failure,
+        CacheNotInitialized,
+        CacheExpired,
+        NoValueFound,
+        NoCacheFound,
+        DuplicateValue
     }
     /// <summary>
     /// Cache client constructor
@@ -71,8 +71,9 @@ public class CacheClient : ICache, ICacheEvents
     /// <param name="expirationSeconds"></param>
     public void Add(string key, object value, int? expirationSeconds)
     {
-        CacheResponseOps res = (CacheResponseOps)StreamReadWrite(CacheOperations.Add.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
-        ClientResponseHandler(res);
+        string serverResponse = (string)StreamReadWrite(CacheOperations.Add.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        string response = ClientResponseHandler(CacheOperations.Add.ToString(), serverResponse, key, (string)value);
+        clientCacheLogger.Info(response);
         OnItemAdded(key);
     }
     /// <summary>
@@ -81,7 +82,9 @@ public class CacheClient : ICache, ICacheEvents
     /// <param name="key"></param>
     public void Remove(string key)
     {
-        object res = StreamReadWrite(CacheOperations.Remove.ToString() + "|" + key);
+        string serverResponse = (string)StreamReadWrite(CacheOperations.Remove.ToString() + "|" + key);
+        string response = ClientResponseHandler(CacheOperations.Remove.ToString(), serverResponse, key, null);
+        clientCacheLogger.Info(response);
         OnItemRemoved(key);
     }
     /// <summary>
@@ -91,28 +94,37 @@ public class CacheClient : ICache, ICacheEvents
     /// <returns></returns>
     public object Get(string key)
     {
-        return StreamReadWrite(CacheOperations.Get.ToString() + "|" + key);
+        string serverResponse = (string)StreamReadWrite(CacheOperations.Get.ToString() + "|" + key);
+        string response = ClientResponseHandler(CacheOperations.Get.ToString(), serverResponse, key, serverResponse);
+        clientCacheLogger.Info(response);
+        return response;
     }
     /// <summary>
     /// To clear the cache
     /// </summary>
     public void Clear()
     {
-        StreamReadWrite(CacheOperations.Clear.ToString() + "|");
+        string serverResponse = (string)StreamReadWrite(CacheOperations.Clear.ToString() + "|");
+        string response = ClientResponseHandler(CacheOperations.Clear.ToString(), serverResponse, null, null);
+        clientCacheLogger.Info(response);
     }
     /// <summary>
     /// To Dispose cache
     /// </summary>
     public void Dispose()
     {
-        StreamReadWrite(CacheOperations.Dispose.ToString() + "|");
+        string serverResponse = (string)StreamReadWrite(CacheOperations.Dispose.ToString() + "|");
+        string response = ClientResponseHandler(CacheOperations.Dispose.ToString(), serverResponse, null, null);
+        clientCacheLogger.Info(response);
     }
     /// <summary>
     /// To Initialize cache instance
     /// </summary>
     void ICache.Initialize()
     {
-        StreamReadWrite(CacheOperations.Init.ToString() + "|");
+        string serverResponse = (string)StreamReadWrite(CacheOperations.Init.ToString() + "|");
+        string response = ClientResponseHandler(CacheOperations.Init.ToString(), serverResponse, null, null);
+        clientCacheLogger.Info(response);
     }
     /// <summary>
     /// To Update cache against key
@@ -122,7 +134,9 @@ public class CacheClient : ICache, ICacheEvents
     /// <param name="expirationSeconds"></param>
     void ICache.Update(string key, object value, int? expirationSeconds)
     {
-        object res = StreamReadWrite(CacheOperations.Update.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        string serverResponse = (string)StreamReadWrite(CacheOperations.Update.ToString() + "|" + key + "|" + value + "|" + expirationSeconds);
+        string response = ClientResponseHandler(CacheOperations.Update.ToString(), serverResponse, key, (string)value);
+        clientCacheLogger.Info(response);
         OnItemUpdated(key);
     }
     /// <summary>
@@ -163,19 +177,16 @@ public class CacheClient : ICache, ICacheEvents
         {
             EnsureTcpConnection();
             stream = tcpClient.GetStream();
-
+           // request = JsonConvert.SerializeObject(request);
             byte[] requestBytes = Encoding.ASCII.GetBytes(request);
             stream.Write(requestBytes, 0, requestBytes.Length);
             string response = "";
             byte[] responseBytes = new byte[1024];
             int bytesRead = stream.Read(responseBytes, 0, responseBytes.Length);
             response = Encoding.ASCII.GetString(responseBytes, 0, bytesRead);
-
             clientCacheLogger.Info(response);
             stream.Close();
             return response;
-
-
 
         }
         catch (ArgumentNullException e)
@@ -298,7 +309,7 @@ public class CacheClient : ICache, ICacheEvents
         {
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4netconfig.config"));
-            return new ClientLogger(); 
+            return new ClientLogger();
         }
         catch (Exception e)
         {
@@ -307,31 +318,35 @@ public class CacheClient : ICache, ICacheEvents
         }
     }
 
-    public static string ClientResponseHandler(CacheResponseOps response)
+    public static string ClientResponseHandler(string operation, string response, string key = null, string value = null)
     {
         String resMsg = "";
-        switch (response) 
+        switch (response)
         {
-            case CacheResponseOps.Success:
-                 resMsg = "Success";
+            case "Success":
+                resMsg = "Success::Operation: " + operation + " Key: " + key + " Value: " + value;
                 break;
-            case CacheResponseOps.Failure:
-                resMsg = "Failure";
+            case "Failure":
+                resMsg = "Success::Operation: " + operation;
                 break;
-            case CacheResponseOps.CacheExpired:
-                resMsg = "CacheExpired";
-                break;
-            case CacheResponseOps.CacheNotInitialized:
+            case "CacheNotInitialized":
                 resMsg = "CacheNotInitialized";
                 break;
-            case CacheResponseOps.DuplicateValue:
-                resMsg = "DuplicateValue";
+            case "CacheExpired":
+                resMsg = "CacheExpired";
                 break;
-            case CacheResponseOps.NoValueFound:
+            case "NoValueFound":
                 resMsg = "NoValueFound";
                 break;
-            case CacheResponseOps.NoCacheFound:
+            case "NoCacheFound":
                 resMsg = "NoCacheFound";
+                break;
+            case "DuplicateValue":
+                resMsg = "DuplicateValue";
+                break;
+
+            default:
+                resMsg = "Operation: " +operation;
                 break;
 
         }
