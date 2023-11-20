@@ -17,10 +17,13 @@ namespace CacheServerConcole
     public class Cache<TKey, TValue>
     {
         private Dictionary<TKey, Frequency<TKey>> _keyCounter = null;
+        Dictionary<TKey, int> sortedDict = null;
+        private Dictionary<TKey, int> _keyCounterNew = null;
         private Dictionary<TKey, CacheItem<TValue>> _cache = null;
         private static readonly object _cacheLock = new object();
         private List<TKey> cacheKeysToEvict = new List<TKey>();
         private static readonly int DEFAULT_CACHE_CAPACITY = 80;
+        Map<string, int> result;
         private int Capacity { get; }
         private Logger Logger { get; }
         /// <summary>
@@ -51,6 +54,8 @@ namespace CacheServerConcole
                         {
                             _cache[key] = new CacheItem<TValue>(value, expiresAfter);
                             _keyCounter.Add(key, new Frequency<TKey>(key, 1));
+                             _keyCounterNew.Add(key, 1);
+                        
                         }
                        // return (TValue)Convert.ChangeType("Value: " + value + " added against key: " + key, typeof(TValue));
                         return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
@@ -285,6 +290,15 @@ namespace CacheServerConcole
             }
             _keyCounter[key].frequency += 1;
         }
+
+        public void IncrementFre(TKey key)
+        {
+            if (!_keyCounterNew.ContainsKey(key))
+            {
+                return;
+            }
+            _keyCounterNew[key] += 1;
+        }
         /// <summary>
         /// To read cache capacity percentage from configurations
         /// </summary>
@@ -310,5 +324,9 @@ namespace CacheServerConcole
                 return DEFAULT_CACHE_CAPACITY;
             }
         }
+        public void GetLFEs()
+        {
+          sortedDict = _keyCounterNew.OrderBy(pair => pair.Value).ToDictionary(TKey =>TKey.Key, pair => pair.Value);
+        } 
     }
 }

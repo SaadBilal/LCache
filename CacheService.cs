@@ -90,7 +90,8 @@ namespace CacheServerConcole
 
                 while (true)
                 {
-                    StartBackgroundthread();
+                    //StartBackgroundthread();
+                    EvictionPolicyTimer();
                     client = listener.AcceptTcpClient();
                    // serverCacheLogger.Info("Connected " + ((IPEndPoint)client.Client.RemoteEndPoint).Address);
                     clientThread = new Thread(HandleClient);
