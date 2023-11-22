@@ -346,7 +346,7 @@ public class CacheClient : ICache, ICacheEvents
                 break;
 
             default:
-                resMsg = "Operation: " +operation;
+                resMsg = "Operation: " + operation;
                 break;
 
         }
