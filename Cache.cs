@@ -17,7 +17,7 @@ namespace CacheServerConcole
     public class Cache<TKey, TValue>
     {
         private Dictionary<TKey, Frequency<TKey>> _keyCounter = null;
-        Dictionary<TKey, int> sortedDict = null;
+        SortedDictionary<TKey, int> sortedDict = null;
         private Dictionary<TKey, int> _keyCounterNew = null;
         private Dictionary<TKey, CacheItem<TValue>> _cache = null;
         private static readonly object _cacheLock = new object();
@@ -54,9 +54,10 @@ namespace CacheServerConcole
                         {
                             _cache[key] = new CacheItem<TValue>(value, expiresAfter);
                             _keyCounter.Add(key, new Frequency<TKey>(key, 1));
-                             _keyCounterNew.Add(key, 1);
-                        
-                        }
+                            //_keyCounterNew.Add(key, 1);
+                            sortedDict.Add(key, 1);
+
+                    }
                        // return (TValue)Convert.ChangeType("Value: " + value + " added against key: " + key, typeof(TValue));
                         return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
                     //}
@@ -98,7 +99,7 @@ namespace CacheServerConcole
                     lock (_cacheLock)
                     {
                         _cache[key] = new CacheItem<TValue>(value, expiresAfter);
-                        Increment(key);
+                        IncrementSorted(key);
                     }
                     return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
                 }
@@ -125,11 +126,12 @@ namespace CacheServerConcole
                 if (!_cache.ContainsKey(key)) return (TValue)Convert.ChangeType(CacheResponseOps.NoValueFound, typeof(TValue));
 
                 var cached = _cache[key];
-                Increment(key);
+                IncrementSorted(key);
                 if (DateTimeOffset.Now - cached.Created >= cached.ExpiresAfter)
                 {
                     _cache.Remove(key);
                     _keyCounter.Remove(key);
+                    sortedDict.Remove(key);
                     return (TValue)Convert.ChangeType(CacheResponseOps.CacheExpired, typeof(TValue));
                 }
                 return cached.Value;
@@ -150,6 +152,7 @@ namespace CacheServerConcole
             {
                 _cache.Remove(key);
                 _keyCounter.Remove(key);
+                sortedDict.Remove(key);
                 return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
             }
             catch (Exception ex)
@@ -167,6 +170,7 @@ namespace CacheServerConcole
             {
                 _cache.Clear();
                 _keyCounter.Clear();
+                sortedDict.Clear();
                 return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
             }
             catch (Exception ex)
@@ -184,8 +188,10 @@ namespace CacheServerConcole
             {
                 _cache.GetEnumerator().Dispose();
                 _keyCounter.GetEnumerator().Dispose();
+                sortedDict.GetEnumerator().Dispose();
                 _cache = null;
                 _keyCounter = null;
+                sortedDict = null; 
                 return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
             }
             catch (Exception ex)
@@ -205,6 +211,7 @@ namespace CacheServerConcole
                 {
                     _cache = new Dictionary<TKey, CacheItem<TValue>>(Capacity);
                     _keyCounter = new Dictionary<TKey, Frequency<TKey>>();
+                    sortedDict = new SortedDictionary<TKey, int>();
                     return (TValue)Convert.ChangeType(CacheResponseOps.Success, typeof(TValue));
                 }
                 else
@@ -225,13 +232,13 @@ namespace CacheServerConcole
         {
             if ((_cache.Count >= Capacity)) 
             {
-                TKey lfuKey = FindLFU();
+                List<TKey> lfuKey = FindLFU();
                 if (lfuKey != null)
                 {
                     Logger.Info("Cache is used upto 80%, Executing LFU eviction policy: Removing Key(s) --> " + lfuKey);
                     lock (_cacheLock)
                     {
-                        foreach(TKey key in cacheKeysToEvict) 
+                        foreach(TKey key in lfuKey) 
                         {
                             _cache.Remove(key);
                             _keyCounter.Remove(key);
@@ -248,25 +255,32 @@ namespace CacheServerConcole
         /// To find least frequently used key value form cache for data eviction based on LFU
         /// </summary>
         /// <returns></returns>
-        public TKey FindLFU()
+        public List<TKey> FindLFU()
         {
-            TKey lfuKey = default;
-            int minFrequency = Int32.MaxValue;
-            int usedCapacity = GetUsedCachePercentage(_cache.Count, Capacity);
-            if(usedCapacity >= GetCacheCapacityPercentage())
+            try 
             {
-                cacheKeysToEvict.Clear();
-                foreach (KeyValuePair<TKey, Frequency<TKey>> entry in _keyCounter)
+                TKey lfuKey = default;
+                Dictionary<TKey, int> dict =  GetLFEs();
+                int n = (int)Math.Round((double)(dict.Count * 20) / 100);
+                dict = (Dictionary<TKey, int>)dict.Take(n);
+                List<TKey> keyList = new List<TKey>();
+           
+                int usedCapacity = GetUsedCachePercentage(_cache.Count, Capacity);
+                if (usedCapacity >= GetCacheCapacityPercentage())
                 {
-                    if (entry.Value.frequency < minFrequency)
+                    foreach (KeyValuePair<TKey, int> pair in dict)
                     {
-                        minFrequency = entry.Value.frequency;
-                        lfuKey = entry.Key;
-                        cacheKeysToEvict.Add(entry.Key);
+                        keyList.Add(pair.Key);
+                        Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
                     }
                 }
+                return keyList;
+            } 
+            catch (Exception e) 
+            {
+                Logger.Error("Exception {0}", e.InnerException);
+                return default;
             }
-            return lfuKey;
         }
         /// <summary>
         /// To calculate cache capacity used
@@ -291,13 +305,13 @@ namespace CacheServerConcole
             _keyCounter[key].frequency += 1;
         }
 
-        public void IncrementFre(TKey key)
+        public void IncrementSorted(TKey key)
         {
-            if (!_keyCounterNew.ContainsKey(key))
+            if (!sortedDict.ContainsKey(key))
             {
                 return;
             }
-            _keyCounterNew[key] += 1;
+            sortedDict[key] += 1;
         }
         /// <summary>
         /// To read cache capacity percentage from configurations
@@ -324,9 +338,18 @@ namespace CacheServerConcole
                 return DEFAULT_CACHE_CAPACITY;
             }
         }
-        public void GetLFEs()
+        public Dictionary<TKey,int> GetLFEs()
         {
-          sortedDict = _keyCounterNew.OrderBy(pair => pair.Value).ToDictionary(TKey =>TKey.Key, pair => pair.Value);
+
+            var sortedDictCal = sortedDict.OrderBy(pair => pair.Value).ToDictionary(pair => pair.Key, pair=> pair.Value);
+            Console.WriteLine(sortedDictCal.Values);
+          
+            foreach (KeyValuePair<TKey, int> pair in sortedDictCal)
+            {
+                Console.WriteLine("{0}: {1}", pair.Key, pair.Value);
+            }
+
+            return sortedDictCal;
         } 
     }
 }
